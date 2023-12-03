@@ -49,12 +49,33 @@ document.addEventListener('DOMContentLoaded', function () {
       
       function convertTemperature(kelvin) {
         if (temperatureUnit === 'celsius') {
-            // Convert Kelvin to Celsius
             return (kelvin - 273.15).toFixed(2);
         } else if (temperatureUnit === 'fahrenheit') {
-            // Convert Kelvin to Fahrenheit
             return ((kelvin - 273.15) * (9/5) + 32).toFixed(2);
         }
-      }    
+      }   
+      
+      function getTemperatureUnitSymbol() {
+        return (temperatureUnit === 'celsius') ? '°C' : '°F';
+    }
+
+    function changeTemperatureUnit(unit) {
+      temperatureUnit = unit;
+      renderWeather(); 
+  }
+
+  function addToSearchHistory(city) {
+    var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    if (!searchHistory.includes(city)) {
+      searchHistory.push(city);
+      if (searchHistory.length > 5) {
+          searchHistory.shift(); 
+      }
+
+      localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+
+      renderSearchHistory();
+  }
+}
 
 });  
