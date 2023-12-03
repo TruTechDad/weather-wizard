@@ -78,23 +78,24 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 }
 
- // Function to render the search history in the UI
+
  function renderSearchHistory() {
   var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-
-  // Clear the existing search history in the UI
   searchHistoryList.innerHTML = null;
-
-  // Create list items for each city in the search history
   for (var city of searchHistory) {
       var listItem = document.createElement('li');
       listItem.textContent = city;
       listItem.classList.add('list-group-item');
       listItem.addEventListener('click', function () {
-          // When a city in the search history is clicked, get weather for that city
           getWeather(this.textContent);
       });
       searchHistoryList.appendChild(listItem);
+  }
+}
+function renderWeather() {
+  var cityName = cityNameSpan.textContent;
+  if (cityName !== 'Error' && cityName !== '') {
+      getWeather(cityName);
   }
 }
 
