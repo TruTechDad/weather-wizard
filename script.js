@@ -99,4 +99,14 @@ function renderWeather() {
   }
 }
 
+ 
+  weatherSearchForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var city = cityInput.value;
+    getWeather(city);
+});
+
+
+renderSearchHistory();
+
 });  
