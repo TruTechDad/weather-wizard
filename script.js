@@ -3,5 +3,58 @@ document.addEventListener('DOMContentLoaded', function () {
   var cityInput = document.querySelector('#city');
   var cityNameSpan = document.querySelector('#city-name');
   var searchHistoryList = document.querySelector('#search-history');
-  var temperatureUnit = 'fahrenheit'; // Default unit
+  var temperatureUnit = 'fahrenheit'; 
+
+  function getWeather(city) {
+    var apiKey = '8d398b7c4a425f52eb6b47abb23c01cf'; 
+    var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+    fetch(apiUrl)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error('City not found');
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            cityNameSpan.textContent = city;
+
+            var weatherResultsContainer = document.querySelector('#weather-results');
+            weatherResultsContainer.innerHTML = null;
+
+            var temperature = data.main.temp;
+            var weatherDescription = data.weather[0].description;
+            var humidity = data.main.humidity;
+
+            var temperatureEl = document.createElement('p');
+            temperatureEl.textContent = `Temperature: ${convertTemperature(temperature)} ${getTemperatureUnitSymbol()}`;
+
+            var weatherDescriptionEl = document.createElement('p');
+            weatherDescriptionEl.textContent = `Weather: ${weatherDescription}`;
+
+            var humidityEl = document.createElement('p');
+            humidityEl.textContent = `Humidity: ${humidity}%`;
+
+            weatherResultsContainer.append(temperatureEl, weatherDescriptionEl, humidityEl);
+    
+            addToSearchHistory(city);
+        })
+        .catch(function (error) {
+          console.error('Error fetching weather data:', error);
+          cityNameSpan.textContent = 'Error';
+          document.getElementById('weather-results').innerHTML = `<p>${error.message}</p>`;
+      }); 
+
+      }  
+      
+      function convertTemperature(kelvin) {
+        if (temperatureUnit === 'celsius') {
+            // Convert Kelvin to Celsius
+            return (kelvin - 273.15).toFixed(2);
+        } else if (temperatureUnit === 'fahrenheit') {
+            // Convert Kelvin to Fahrenheit
+            return ((kelvin - 273.15) * (9/5) + 32).toFixed(2);
+        }
+      }    
+
 });  
